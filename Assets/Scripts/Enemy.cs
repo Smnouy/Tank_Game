@@ -121,9 +121,18 @@ public class Enemy : MonoBehaviour
     //坦克的死亡方法
     private void Die()
     {
+        PlayerManager.Instance.PlayerScore++;
         //产生爆炸特效
         Instantiate(ExplosiongPrefab, transform.position, Quaternion.identity);
         //死亡
         Destroy(gameObject);
+    }
+    //如果敌人互相触碰到立即旋转
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.tag == "Enemy")
+        {
+            TimeValDirection = 4;
+        }
     }
 }

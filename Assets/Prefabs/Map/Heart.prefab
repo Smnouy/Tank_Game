@@ -121,4 +121,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ExplosionPrefab: {fileID: 976539893780829775, guid: 0d41c161924f16c4da1735df282d7673,
     type: 3}
+  DieAudio: {fileID: 8300000, guid: 41660860d05dbdf49b3c8da6332a4ef9, type: 3}
   BrokenSprite: {fileID: 21300012, guid: 529e000d42d32de49bc475716ba7ae37, type: 3}

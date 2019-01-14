@@ -42,6 +42,10 @@ public class Bullet : MonoBehaviour
                 Destroy(gameObject);//销毁自身
                 break;
             case "Barrier":
+                if (IsPlayerBullet)
+                {
+                    collision.SendMessage("PlayAudio");
+                }
                 Destroy(gameObject);
                 break;
             case "Tank":
@@ -50,6 +54,10 @@ public class Bullet : MonoBehaviour
                     collision.SendMessage("Die");
                     Destroy(gameObject);
                 }
+                break;
+            case "Bullet":
+                Destroy(collision.gameObject);
+                Destroy(gameObject);
                 break;
             default:
                 break;

@@ -16,6 +16,8 @@ public class Player : MonoBehaviour
     public GameObject BulletPrefab;
     public GameObject ExplosiongPrefab;
     public GameObject DefendEffectPrefab;
+    public AudioSource MoveAudio;
+    public AudioClip[] TankAudio;
 
     private void Awake()
     {
@@ -40,27 +42,30 @@ public class Player : MonoBehaviour
                 DefendEffectPrefab.SetActive(false);
             }
         }
-        //攻击CD
-        if (BulletTimeVal >= 0.4f)
-        {
-            Attack();
-            
-        }
-        else
-        {
-            BulletTimeVal += Time.deltaTime;
-        }
-        
     }
 
     private void FixedUpdate()
     {
+       
+        if (PlayerManager.Instance.IsDefeat)
+        {
+            return;
+        }
         Move();
-        //Attack();
+        //攻击CD
+        if (BulletTimeVal >= 0.4f)
+        {
+            Attack();
+
+        }
+        else
+        {
+            BulletTimeVal += Time.fixedDeltaTime;
+        }
     }
     //坦克的移动方法
     private void Move()
-    {//垂直
+    {   //垂直
         float v = Input.GetAxisRaw("Vertical");
         transform.Translate(Vector3.up * v * MoveSpeed * Time.deltaTime, Space.World);
         if (v < 0)//下
@@ -72,6 +77,25 @@ public class Player : MonoBehaviour
         {
             sr.sprite = TankSpirte[0];
             BulletEulerAngles = new Vector3(0, 0, 0);
+        }
+        //播放音效
+        if(Mathf.Abs(v) > 0.05f)
+        {
+            MoveAudio.clip = TankAudio[1];
+           
+            if (!MoveAudio.isPlaying)
+            {
+                MoveAudio.Play();
+            }
+        }
+        else
+        {
+            MoveAudio.clip = TankAudio[0];
+
+            if (!MoveAudio.isPlaying)
+            {
+                MoveAudio.Play();
+            }
         }
         if (v != 0)
         {
@@ -89,6 +113,25 @@ public class Player : MonoBehaviour
         {
             sr.sprite = TankSpirte[1];
             BulletEulerAngles = new Vector3(0, 0, -90);
+        }
+  
+        if(Mathf.Abs(h) > 0.05f)
+        {
+            MoveAudio.clip = TankAudio[1];
+
+            if (!MoveAudio.isPlaying)
+            {
+                MoveAudio.Play();
+            }
+        }
+        else
+        {
+            MoveAudio.clip = TankAudio[0];
+
+            if (!MoveAudio.isPlaying)
+            {
+                MoveAudio.Play();
+            }
         }
     }
     //坦克的攻击方法
@@ -108,6 +151,8 @@ public class Player : MonoBehaviour
         {
             return;
         }
+        //玩家生命值减1
+        PlayerManager.Instance.PlayerIsDead = true;
         //产生爆炸特效
         Instantiate(ExplosiongPrefab, transform.position, Quaternion.identity);
         //死亡
